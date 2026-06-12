@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e ' *)",
+      "Bash(cd \"/c/Users/Dell/OneDrive/Desktop/nre\" && grep -oE \"^\\(function [a-zA-Z_]+|const [a-zA-Z_]+\\\\s*=\\)\" index.html | sort | uniq -d)",
+      "Read(//c/c/Users/Dell/OneDrive/Desktop/nre/**)",
+      "Read(//c/Program Files/Google/Chrome/Application/**)",
+      "PowerShell($dom = Get-Content chrome_dom.txt -Raw; $i = $dom.IndexOf\\('id=\"page-dashboard\"'\\); $dom.Substring\\($i, 400\\); \"...\"; \\(\"CONTAINS hero-greeting: \" + $dom.Contains\\('hero-greeting'\\)\\); \\(\"CONTAINS Today's Habits: \" + $dom.Contains\\(\"Today's Habits\"\\)\\); \\(\"CONTAINS stat-chip: \" + $dom.Contains\\('stat-chip'\\)\\))",
+      "PowerShell(\\(Get-Content \"c:\\\\Users\\\\Dell\\\\OneDrive\\\\Desktop\\\\Do iT\\\\index.html\" | Measure-Object -Line\\).Lines)",
+      "PowerShell(node --version)",
+      "PowerShell(npm --version)",
+      "PowerShell(New-Item -ItemType Directory -Force \"c:\\\\Users\\\\Dell\\\\OneDrive\\\\Desktop\\\\Do iT\\\\src\")",
+      "PowerShell(Read-Host -Prompt \"dummy\")",
+      "PowerShell(@\\('core','widgets','modals','search','pages'\\) | ForEach-Object { New-Item -ItemType Directory -Force \"c:\\\\Users\\\\Dell\\\\OneDrive\\\\Desktop\\\\Do iT\\\\src\\\\$_\" | Out-Null }; Write-Output \"All directories created\")",
+      "Bash(npm run *)",
+      "PowerShell(gh --version)",
+      "PowerShell(gh auth status)",
+      "PowerShell(git init -b main)",
+      "PowerShell(git add -A)"
+    ]
+  }
+}

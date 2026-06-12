@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Logs
+npm-debug.log*
+*.log
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.local
+
+# Env (none used yet, but never commit them)
+.env
+.env.*
+
+# Local data exports — backups contain personal data, keep them out of git
+personal-os-backup-*.json
+habits-*.csv
+finance-*.csv

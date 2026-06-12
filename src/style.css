@@ -1,0 +1,11 @@
+/* ── Tailwind CSS v4 ── */
+/* The app's core styles + theme variables live in index.html <style>. */
+@import "tailwindcss";
+
+/* Override Tailwind preflight; colors come from the theme variables so light/dark both work */
+@layer base {
+  html, body {
+    background: var(--bg-base);
+    color: var(--text-primary);
+  }
+}

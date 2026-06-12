@@ -1,0 +1,12 @@
+{
+  "name": "Personal OS",
+  "short_name": "PersonalOS",
+  "description": "Your entire life, one tab — tasks, habits, finance, deep work, analytics.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0b0a",
+  "theme_color": "#0a0b0a",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
