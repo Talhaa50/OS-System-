@@ -451,6 +451,63 @@ button { cursor:pointer; font-family:var(--font-body); }
 .cd-pct { font-size:9.5px; font-family:var(--font-mono); color:var(--text-muted); white-space:nowrap; }
 html.light .cd-num { text-shadow:none; }
 
+/* ── FULLSCREEN ZOOM (double-click countdown / focus chart) ── */
+#zoom-overlay {
+  position:fixed; inset:0; background:rgba(4,7,4,0.93);
+  backdrop-filter:blur(8px); z-index:1200;
+  display:none; align-items:center; justify-content:center;
+}
+#zoom-overlay.open { display:flex; animation:fadeIn 0.2s ease both; }
+html.light #zoom-overlay { background:rgba(234,232,218,0.95); }
+.zoom-box { width:min(94vw,1100px); max-height:92vh; overflow-y:auto; animation:slideUp 0.25s cubic-bezier(0.4,0,0.2,1) both; }
+.zoom-close {
+  position:absolute; top:22px; right:26px; width:38px; height:38px;
+  border-radius:50%; background:var(--bg-elevated); border:1px solid var(--border-mid);
+  color:var(--text-primary); font-size:15px; cursor:pointer; z-index:1;
+  display:flex; align-items:center; justify-content:center; transition:all var(--transition);
+}
+.zoom-close:hover { border-color:var(--accent); color:var(--accent); box-shadow:var(--glow-green); }
+.zoom-hint { text-align:center; font-size:10.5px; color:var(--text-muted); margin-top:18px; font-family:var(--font-mono); }
+.cd-xl .cd-block { max-width:170px; }
+.cd-xl .cd-num { font-size:clamp(44px,9vw,88px); padding:26px 8px; border-radius:var(--radius-lg); }
+.cd-xl .cd-sep { font-size:clamp(28px,5vw,52px); padding-top:38px; }
+.cd-xl .cd-lbl { font-size:11px; margin-top:10px; }
+.cd-xl .cd-foot { margin-top:22px; }
+.card-zoomable { cursor:zoom-in; }
+
+/* ── NOTIFICATIONS ── */
+#notif-btn { position:relative; }
+.notif-badge {
+  position:absolute; top:2px; right:2px; min-width:14px; height:14px;
+  border-radius:7px; background:var(--red); color:#fff;
+  font-size:9px; font-weight:700; padding:0 3px;
+  display:none; align-items:center; justify-content:center;
+  box-shadow:0 0 8px rgba(248,113,113,0.5); pointer-events:none;
+}
+#notif-panel {
+  position:fixed; top:58px; right:16px; width:330px; max-height:420px; overflow-y:auto;
+  background:var(--bg-card); border:1px solid var(--border-mid); border-radius:var(--radius-lg);
+  z-index:600; display:none; box-shadow:0 24px 56px rgba(0,0,0,0.45);
+}
+#notif-panel.open { display:block; animation:slideUp 0.16s ease both; }
+.notif-head { padding:11px 14px 8px; font-size:9.5px; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-muted); font-weight:700; border-bottom:1px solid var(--border); }
+.notif-item { display:flex; gap:9px; align-items:flex-start; padding:10px 14px; border-bottom:1px solid var(--border); cursor:pointer; font-size:12px; transition:background var(--transition); }
+.notif-item:hover { background:var(--accent-glow); }
+.notif-item:last-child { border-bottom:none; }
+.notif-empty { padding:22px 14px; text-align:center; color:var(--text-muted); font-size:12px; }
+
+/* ── UP NEXT (hero digest) ── */
+.upnext-row {
+  display:flex; align-items:center; gap:9px; padding:7px 0;
+  border-bottom:1px solid var(--border); cursor:pointer; font-size:12px;
+  transition:all var(--transition);
+}
+.upnext-row:last-child { border-bottom:none; }
+.upnext-row:hover { padding-left:4px; }
+.upnext-row:hover .upnext-label { color:var(--accent); }
+.upnext-label { flex:1; color:var(--text-secondary); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; transition:color var(--transition); }
+.upnext-when { font-family:var(--font-mono); font-size:10.5px; color:var(--cyan); white-space:nowrap; }
+
 /* ── COMPONENT: HEATMAP ── */
 .heatmap-grid { display:grid; grid-template-columns:repeat(53,1fr); gap:2px; }
 .heatmap-cell { aspect-ratio:1; background:var(--bg-elevated); border-radius:1.5px; }
@@ -602,7 +659,8 @@ html.light .cd-num { text-shadow:none; }
 .empty-text { font-size:13px; max-width:240px; }
 
 /* ── PART-2 COMPONENTS ── */
-.stat-chip { display:flex;flex-direction:column;gap:3px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent 50%),var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;min-width:0;transition:border-color var(--transition),box-shadow var(--transition); }
+.stat-chip { display:flex;flex-direction:column;gap:3px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent 50%),var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;min-width:0;cursor:pointer;transition:border-color var(--transition),box-shadow var(--transition),transform var(--transition); }
+.stat-chip:active { transform:scale(0.97); }
 .stat-chip:hover { border-color:var(--border-mid); box-shadow:var(--glow-green-soft); }
 .chip-icon { font-size:14px; }
 .chip-val  { font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--text-primary);line-height:1; }
@@ -697,7 +755,7 @@ html.light .cd-num { text-shadow:none; }
     </div>
   </div>
 
-  <div class="sb-user">
+  <div class="sb-user" style="cursor:pointer;" title="Settings" onclick="navigate('settings')">
     <div class="u-avatar" id="sb-avatar">Z</div>
     <div class="u-info">
       <div class="u-name" id="sb-name">Zyrax</div>
@@ -837,7 +895,7 @@ html.light .cd-num { text-shadow:none; }
   </div>
 
   <div class="sb-bottom">
-    <div class="focus-pill">
+    <div class="focus-pill" style="cursor:pointer;" title="Start/pause deep work timer (Space)" onclick="dwToggle()">
       <div class="focus-dot"></div>
       <span class="focus-text">Focus Mode Active</span>
     </div>
@@ -879,13 +937,14 @@ html.light .cd-num { text-shadow:none; }
           <path d="M7.5 1v1.5M7.5 12.5V14M1 7.5h1.5M12.5 7.5H14M3 3l1 1M11 11l1 1M3 12l1-1M11 4l1-1"/>
         </svg>
       </button>
-      <button class="icon-btn" title="Notifications">
+      <button class="icon-btn" id="notif-btn" title="Notifications" onclick="toggleNotifs()">
         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M7.5 1.5C5 1.5 3 3.5 3 6v3.5L1.5 11h12L12 9.5V6c0-2.5-2-4.5-4.5-4.5z"/>
           <path d="M6 11.5a1.5 1.5 0 0 0 3 0"/>
         </svg>
+        <span class="notif-badge" id="notif-badge"></span>
       </button>
-      <div class="tb-avatar" id="tb-avatar">Z</div>
+      <div class="tb-avatar" id="tb-avatar" title="Settings" onclick="navigate('settings')">Z</div>
     </div>
   </div>
 
@@ -909,6 +968,15 @@ html.light .cd-num { text-shadow:none; }
 
 </div><!-- /#main -->
 </div><!-- /#app -->
+
+<!-- ═══════════════ NOTIFICATIONS PANEL ═══════════════ -->
+<div id="notif-panel"></div>
+
+<!-- ═══════════════ FULLSCREEN ZOOM ═══════════════ -->
+<div id="zoom-overlay">
+  <button class="zoom-close" onclick="closeZoom()" title="Close (Esc)">✕</button>
+  <div class="zoom-box" id="zoom-box"></div>
+</div>
 
 <!-- ═══════════════ GLOBAL SEARCH ═══════════════ -->
 <div id="search-overlay">

@@ -67,5 +67,6 @@ export function updateCountdown() {
 
 export function setCountdownMode(m) {
   DB.countdownMode = m; save();
-  renderCountdown('dash-countdown');
+  // re-render whichever instance is live (fullscreen zoom wins if open)
+  renderCountdown($('zoom-cd') ? 'zoom-cd' : 'dash-countdown');
 }

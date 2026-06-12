@@ -16,7 +16,10 @@
       "PowerShell(gh --version)",
       "PowerShell(gh auth status)",
       "PowerShell(git init -b main)",
-      "PowerShell(git add -A)"
+      "PowerShell(git add -A)",
+      "PowerShell(git remote add origin https://github.com/Talhaa50/OS-System-.git)",
+      "PowerShell(git push -u origin main)",
+      "PowerShell(git push)"
     ]
   }
 }

@@ -25,6 +25,8 @@ import { rPacman, pacToggle, pacRestart } from './pages/pacman.js';
 import { rSettings, updateUserName, updateUserStatus, expAll, impAll, expCSV, expFin, printWeeklySummary, clearAll } from './pages/settings.js';
 import { setWater } from './widgets/water.js';
 import { updateCountdown, setCountdownMode } from './widgets/countdown.js';
+import { openZoom, closeZoom } from './widgets/zoom.js';
+import { toggleNotifs, closeNotifs, updateNotifBadge } from './widgets/notifications.js';
 
 // Wire up router
 registerRenderers({
@@ -66,6 +68,7 @@ function tick() {
   if (gr) gr.textContent = h<12?'Good morning,':(h<17?'Good afternoon,':'Good evening,');
   const hn = $('hero-name'); if (hn) hn.textContent = DB.username||'Zyrax';
   updateCountdown();
+  if (now.getSeconds() === 0) updateNotifBadge();   // refresh badge once a minute
 }
 setInterval(tick, 1000);
 
@@ -169,6 +172,8 @@ document.addEventListener('keydown', e => {
   const tag  = document.activeElement?.tagName;
   const busy = ['INPUT','TEXTAREA','SELECT'].includes(tag) || document.activeElement?.isContentEditable;
   if (e.key === 'Escape') {
+    if (closeZoom())   return;
+    if (closeNotifs()) return;
     if ($('search-overlay').classList.contains('open'))    { closeGlobalSearch();  return; }
     if ($('editModalOverlay').classList.contains('open'))  { closeEditModal();     return; }
     if ($('modalOverlay').classList.contains('open'))      { closeModalDirect();   return; }
@@ -196,7 +201,10 @@ document.addEventListener('click', e=>{
   if(e.target===$('search-overlay'))    closeGlobalSearch();
   if(e.target===$('modalOverlay'))      closeModalDirect();
   if(e.target===$('editModalOverlay'))  closeEditModal();
+  if(!e.target.closest('#notif-panel')&&!e.target.closest('#notif-btn')) closeNotifs();
 });
+// double-click the zoom backdrop to close fullscreen view
+$('zoom-overlay').addEventListener('dblclick', e=>{ if(e.target===$('zoom-overlay')) closeZoom(); });
 
 // Expose all globals for inline onclick handlers
 Object.assign(window, {
@@ -238,6 +246,8 @@ Object.assign(window, {
   setCountdownMode,
   // pacman
   rPacman, pacToggle, pacRestart,
+  // zoom + notifications
+  openZoom, closeZoom, toggleNotifs,
   // clock
   tick,
   // showToast
@@ -270,6 +280,7 @@ Object.defineProperty(window, '_curPage', { get: () => _curPage, configurable: t
   });
 
   tick();
+  updateNotifBadge();
   navigate(VALID_PAGES.includes(DB.lastPage)?DB.lastPage:'dashboard');
 
   // Backup nag: localStorage is fragile (browser data clears wipe it) —
